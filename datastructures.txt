@@ -1,0 +1,32 @@
+Bước 1: Sàng Eratosthenes để tìm số nguyên tố:
+
+Sử dụng sàng để tạo danh sách các số nguyên tố nhỏ hơn 
+𝑁
+N.
+Bước 2: Tạo mảng các số Blum:
+
+Duyệt qua các cặp 
+𝑝
+×
+𝑞
+p×q với 
+𝑝
+,
+𝑞
+p,q là các số nguyên tố khác nhau và lưu kết quả nếu 
+𝑝
+×
+𝑞
+<
+𝑁
+p×q<N.
+Bước 3: Tìm cặp số Blum có tổng cũng là số Blum:
+
+Kiểm tra từng cặp số Blum và kiểm tra tổng của chúng có nằm trong mảng số Blum không.
+Bước 4: Kiểm tra số Blum 
+𝑀
+M:
+
+Tìm kiếm 
+𝑀
+M trong mảng số Blum.
