@@ -1,0 +1,104 @@
+#include <iostream>
+#include <string>
+#include <stack>
+
+using namespace std;
+
+// Cấu trúc node cho cây biểu thức
+struct Node {
+    string value;   // Giá trị của node (toán tử hoặc toán hạng)
+    Node* left;     // Con trái
+    Node* right;    // Con phải
+
+    Node(string val) : value(val), left(nullptr), right(nullptr) {}
+};
+
+// Lớp cây biểu thức
+class ExpressionTree {
+private:
+    Node* root;
+
+    // Hàm duyệt trung tố (Inorder)
+    void inorder(Node* node) {
+        if (node == nullptr) return;
+        if (node->left) cout << "("; // Mở ngoặc khi vào nhánh con
+        inorder(node->left);
+        cout << node->value << " ";
+        inorder(node->right);
+        if (node->right) cout << ")"; // Đóng ngoặc khi ra khỏi nhánh con
+    }
+
+    // Hàm duyệt hậu tố (Postorder)
+    void postorder(Node* node) {
+        if (node == nullptr) return;
+        postorder(node->left);
+        postorder(node->right);
+        cout << node->value << " ";
+    }
+
+    // Hàm duyệt tiền tố (Preorder)
+    void preorder(Node* node) {
+        if (node == nullptr) return;
+        cout << node->value << " ";
+        preorder(node->left);
+        preorder(node->right);
+    }
+
+public:
+    ExpressionTree() : root(nullptr) {}
+
+    // Hàm khởi tạo cây từ biểu thức hậu tố
+    void buildFromPostfix(const string& postfix) {
+        stack<Node*> st;
+        for (char ch : postfix) {
+            if (isalnum(ch)) {
+                // Nếu là toán hạng, tạo node lá
+                st.push(new Node(string(1, ch)));
+            } else {
+                // Nếu là toán tử, tạo node với con trái/phải
+                Node* right = st.top(); st.pop();
+                Node* left = st.top(); st.pop();
+                Node* opNode = new Node(string(1, ch));
+                opNode->left = left;
+                opNode->right = right;
+                st.push(opNode);
+            }
+        }
+        root = st.top();
+    }
+
+    // In cây theo các cách duyệt
+    void printInorder() {
+        cout << "Trung tố: ";
+        inorder(root);
+        cout << endl;
+    }
+
+    void printPostorder() {
+        cout << "Hậu tố: ";
+        postorder(root);
+        cout << endl;
+    }
+
+    void printPreorder() {
+        cout << "Tiền tố: ";
+        preorder(root);
+        cout << endl;
+    }
+};
+
+int main() {
+    ExpressionTree tree;
+    string postfix;
+
+    cout << "Nhập biểu thức hậu tố: ";
+    cin >> postfix;
+
+    tree.buildFromPostfix(postfix);
+
+    tree.printInorder();
+    tree.printPostorder();
+    tree.printPreorder();
+
+    return 0;
+}
