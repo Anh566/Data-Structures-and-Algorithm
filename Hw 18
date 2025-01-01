@@ -1,0 +1,100 @@
+#include <iostream>
+#include <vector>
+#include <queue>
+#include <stack>
+
+using namespace std;
+
+// Hàm duyệt BFS
+void BFS(const vector<vector<int>>& adjMatrix, int start) {
+    int n = adjMatrix.size();
+    vector<bool> visited(n, false);
+    queue<int> q;
+
+    q.push(start);
+    visited[start] = true;
+
+    cout << "BFS: ";
+    while (!q.empty()) {
+        int v = q.front();
+        q.pop();
+        cout << v << " ";
+
+        for (int i = 0; i < n; i++) {
+            if (adjMatrix[v][i] && !visited[i]) {
+                visited[i] = true;
+                q.push(i);
+            }
+        }
+    }
+    cout << endl;
+}
+
+// Hàm duyệt DFS
+void DFS(const vector<vector<int>>& adjMatrix, int start) {
+    int n = adjMatrix.size();
+    vector<bool> visited(n, false);
+    stack<int> s;
+
+    s.push(start);
+
+    cout << "DFS: ";
+    while (!s.empty()) {
+        int v = s.top();
+        s.pop();
+
+        if (!visited[v]) {
+            visited[v] = true;
+            cout << v << " ";
+        }
+
+        for (int i = n - 1; i >= 0; i--) {
+            if (adjMatrix[v][i] && !visited[i]) {
+                s.push(i);
+            }
+        }
+    }
+    cout << endl;
+}
+
+int main() {
+    int n, m;
+    cout << "Nhập số đỉnh và số cạnh: ";
+    cin >> n >> m;
+
+    // Ma trận kề
+    vector<vector<int>> adjMatrix(n, vector<int>(n, 0));
+    cout << "Nhập các cạnh (u v):" << endl;
+    for (int i = 0; i < m; i++) {
+        int u, v;
+        cin >> u >> v;
+        adjMatrix[u][v] = 1;
+        adjMatrix[v][u] = 1; // Đồ thị vô hướng
+    }
+
+    // Duyệt BFS và DFS từ đỉnh 0
+    BFS(adjMatrix, 0);
+    DFS(adjMatrix, 0);
+
+    // Danh sách kề
+    vector<vector<int>> adjList(n);
+    for (int u = 0; u < n; u++) {
+        for (int v = 0; v < n; v++) {
+            if (adjMatrix[u][v]) {
+                adjList[u].push_back(v);
+            }
+        }
+    }
+
+    // In danh sách kề
+    cout << "Danh sách kề:" << endl;
+    for (int u = 0; u < n; u++) {
+        cout << u << ": ";
+        for (int v : adjList[u]) {
+            cout << v << " ";
+        }
+        cout << endl;
+    }
+
+    return 0;
+}
